@@ -5,7 +5,7 @@
 1. Khách hàng tìm phim theo tên, xem danh sách và chi tiết phim.
 2. Nhân viên quản lý xem báo cáo, thống kê khách hàng theo doanh thu trong khoảng ngày và xem các hóa đơn của từng khách hàng.
 
-Scenario v3.0 được ánh xạ thành `MovieServlet5 → MovieDAO5 → Movie5` và `CustomerRevenueServlet5 → CustomerRevenueStatisticDAO5/InvoiceDAO5 → CustomerRevenueStatistic5/Invoice5`. Mỗi lớp giao diện trong sơ đồ là một JSP cùng tên, viết liền theo quy ước Java. Lớp `DAO5` giữ phần kết nối chung. Đăng nhập là tiền điều kiện của hai scenario; `LoginInterface5.jsp` và các lớp xác thực được thêm để vận hành đúng điều kiện đó.
+Scenario v3.0 được ánh xạ thành `MovieServlet5 → MovieDAO5 → Movie5` và `CustomerRevenueServlet5 → CustomerRevenueStatisticDAO5/InvoiceDAO5 → CustomerRevenueStatistic5/Invoice5`. Mỗi lớp giao diện trong sơ đồ là một JSP cùng tên, viết liền theo quy ước Java. Lớp `DAO5` giữ phần kết nối chung. Đăng nhập là tiền điều kiện để chạy thử hai scenario; các file đăng nhập và dữ liệu mẫu nằm trong thư mục `demo` riêng.
 
 | Tên lớp giao diện trong tài liệu | File JSP |
 | --- | --- |
@@ -24,28 +24,32 @@ Scenario v3.0 được ánh xạ thành `MovieServlet5 → MovieDAO5 → Movie5`
 
 - Tìm phim: `MainInterface5.jsp` → `SearchInterface5.jsp` → `MovieServlet5.doGet/timkiemphim` → `MovieDAO5.getphimtheoten` → `Movie5[]` → `MovieListInterface5.jsp` (thuộc tính `dsphim`) → `MovieServlet5.xemchitietphim` → `MovieDAO5.getthongtinphim` → `Movie5` → `MovieDetailInterface5.jsp`.
 - Doanh thu: `MainInterface5.jsp` → `ReportInterface5.jsp` → `CustomerRevenueSearchInterface5.jsp` → `CustomerRevenueServlet5.doGet/xemthongke` → `CustomerRevenueStatisticDAO5.getdskhachhang` → `CustomerRevenueStatistic5[]` → `CustomerRevenueListInterface5.jsp` (thuộc tính `dskhachhang`) → `CustomerRevenueServlet5.xemgiaodichkhachhang` → `InvoiceDAO5.getgiaodichkh` → `Invoice5[]` → `CustomerTransactionDetailInterface5.jsp` (thuộc tính `giaodich`, `khachhang`). `Customer5` ở bước cuối lấy từ danh sách thống kê của cùng phiên và khoảng ngày, không thêm lời gọi DAO ngoài biểu đồ tuần tự.
-- Các trường giao diện có trong scenario đều có điều khiển hoặc vùng hiển thị `id`/`name`/`data-output` trùng tên trong JSP. Dữ liệu mẫu `db/seed.sql` không cung cấp URL poster hoặc trailer; trang chi tiết luôn hiện ảnh thay thế và dòng “Chưa có trailer” cho hai trường này.
+- Các trường giao diện có trong scenario đều có điều khiển hoặc vùng hiển thị `id`/`name`/`data-output` trùng tên trong JSP. Dữ liệu mẫu `db/demo/seed.sql` không cung cấp URL poster hoặc trailer; trang chi tiết luôn hiện ảnh thay thế và dòng “Chưa có trailer” cho hai trường này.
 - Sơ đồ dùng tên giao diện có dấu cách và kiểu `DateTime`, không phải định danh/kiểu Java hợp lệ trong dự án này; tên file JSP được viết liền theo Java, ngày từ `<input type="date">` dùng `LocalDate`. Sơ đồ lớp thống kê ghi `getdskhachhang(): Customer5[]` trong khi scenario và biểu đồ tuần tự ghi `CustomerRevenueStatistic5[]`; code dùng kiểu kết quả của scenario. `DAO5` mở `Connection` theo từng truy vấn và đóng bằng try-with-resources để Servlet dùng đồng thời an toàn, thay vì giữ một `Connection` dùng chung ở trường `con`.
 
 ## Cấu trúc
 
 ```text
-db/                     schema.sql, seed.sql
+db/                     schema.sql của hai module
+  demo/                 schema.sql và seed.sql phục vụ đăng nhập, dữ liệu chạy thử
 src/main/java/.../
   config/                Kết nối MySQL
   dao/                   DAO5 và các DAO theo sơ đồ
   model/                 Movie5, User5, Customer5, Booking5, Invoice5, CustomerRevenueStatistic5
-  web/                   Servlet5, bộ lọc đăng nhập
+  web/                   MainServlet5, MovieServlet5, CustomerRevenueServlet5, Pages5
+  demo/dao/              AccountDAO5 cho tài khoản chạy thử
+  demo/web/              LoginServlet5, LogoutServlet5, AuthFilter5
 src/main/webapp/
-  WEB-INF/views/         JSP cho từng bước của hai module
-  assets/css/            Giao diện
+  WEB-INF/views/         MainInterface5.jsp, movie/, revenue/, shared/
+    demo/                LoginInterface5.jsp
+  assets/                CSS chung và ảnh poster thay thế
 ```
 
 ## Chạy
 
 Yêu cầu JDK 17+, Maven 3.9+, MySQL 8 và Apache Tomcat 8.5 hoặc 9 (Servlet `javax`). Trên máy hiện tại có MySQL 8.4 và XAMPP Tomcat 8.5.96.
 
-1. Chạy `db/schema.sql`, sau đó `db/seed.sql` bằng MySQL Workbench hoặc `mysql`.
+1. Chạy `db/schema.sql`, `db/demo/schema.sql`, rồi `db/demo/seed.sql` bằng MySQL Workbench hoặc `mysql`.
 2. Đặt biến môi trường `CINEMAN_DB_URL`, `CINEMAN_DB_USER`, `CINEMAN_DB_PASSWORD` nếu khác mặc định `jdbc:mysql://localhost:3306/cineman`, `root`, mật khẩu rỗng.
 3. Chạy `mvn clean package`.
 4. Chép `target/cineman.war` vào thư mục `webapps` của Tomcat rồi mở `http://localhost:8080/cineman/`.
@@ -54,7 +58,7 @@ Lệnh Maven trên chạy kiểm tra truy vấn DAO bằng H2 ở chế độ My
 
 ### Chạy trên máy Windows hiện tại (XAMPP Tomcat 8.5)
 
-1. Trong MySQL Workbench, đăng nhập MySQL 8.4, mở và chạy toàn bộ `db/schema.sql`, rồi chạy `db/seed.sql` trên CSDL mới.
+1. Trong MySQL Workbench, đăng nhập MySQL 8.4, mở và chạy lần lượt `db/schema.sql`, `db/demo/schema.sql`, `db/demo/seed.sql` trên CSDL mới.
 2. Mở PowerShell tại thư mục dự án và chạy các lệnh sau. Nhập mật khẩu MySQL khi được hỏi; **không** nhập mật khẩu vào source code.
 
 ```powershell
