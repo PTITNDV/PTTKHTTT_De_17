@@ -1,6 +1,14 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="shared/header.jspf" %>
 <section class="hero"><div class="eyebrow">CHÀO MỪNG ĐẾN CINEMAN</div><h1>Khám phá câu chuyện<br><em>trên màn ảnh lớn.</em></h1><p>Tra cứu thông tin phim và theo dõi hiệu quả kinh doanh của rạp trong một không gian làm việc rõ ràng.</p></section>
-<section class="module-grid" aria-label="Chức năng"><a id="subtimkiemphim" class="module-card movie-card" href="${pageContext.request.contextPath}/movies"><span class="module-number">01 / KHÁCH HÀNG</span><span class="module-art">◉</span><h2>Tìm kiếm thông tin phim</h2><p>Nhập tên phim, chọn kết quả và xem đầy đủ thông tin chi tiết.</p><span class="card-link">Khám phá phim →</span></a>
-<c:if test="${sessionScope.role == 'MANAGER'}"><a id="subxembaocao" class="module-card report-card" href="${pageContext.request.contextPath}/reports/customer-revenue?action=report"><span class="module-number">02 / QUẢN LÝ</span><span class="module-art">▥</span><h2>Khách hàng theo doanh thu</h2><p>Chọn khoảng thời gian, xem tổng hợp và chi tiết các giao dịch.</p><span class="card-link">Xem báo cáo →</span></a></c:if></section>
+<section class="module-grid" aria-label="Chức năng">
+  <a id="subtimkiemphim" class="module-card movie-card" href="${pageContext.request.contextPath}/movies">
+    <h2>Tìm kiếm thông tin phim</h2>
+  </a>
+  <c:if test="${sessionScope.role == 'MANAGER'}">
+    <a id="subxembaocao" class="module-card report-card" href="${pageContext.request.contextPath}/reports/customer-revenue?action=report">
+      <h2>Thống kê khách hàng</h2>
+    </a>
+  </c:if>
+</section>
 <%@ include file="shared/footer.jspf" %>
