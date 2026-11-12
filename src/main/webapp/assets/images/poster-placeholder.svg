@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 600" role="img" aria-label="Chưa có poster">
+  <defs><linearGradient id="g" x2="1" y2="1"><stop stop-color="#355359"/><stop offset=".65" stop-color="#122228"/><stop offset="1" stop-color="#6c4935"/></linearGradient></defs>
+  <rect width="400" height="600" fill="url(#g)"/>
+  <path d="M200 175l15 55 55 15-55 15-15 55-15-55-55-15 55-15z" fill="#d9a96c" opacity=".8"/>
+  <text x="200" y="410" fill="#f4f2ec" font-family="Arial,sans-serif" font-size="37" font-weight="700" text-anchor="middle" letter-spacing="5">CINEMAN</text>
+  <text x="200" y="446" fill="#b6c2c1" font-family="Arial,sans-serif" font-size="16" text-anchor="middle">Chưa có poster</text>
+</svg>

@@ -1,0 +1,12 @@
+<%@ page pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<fmt:setLocale value="vi_VN" />
+<!doctype html><html lang="vi"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CineMan</title><link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/style.css"></head><body>
+<header class="site-header"><div class="shell nav"><a class="brand" href="${pageContext.request.contextPath}/"><span class="brand-icon">✦</span> CINE<span>MAN</span></a>
+<nav aria-label="Điều hướng chính"><a href="${pageContext.request.contextPath}/movies">Tìm phim</a>
+<c:if test="${sessionScope.role == 'MANAGER'}"><a href="${pageContext.request.contextPath}/reports/customer-revenue?action=report">Báo cáo</a></c:if></nav>
+<div class="account"><span><c:out value="${sessionScope.user.hoten}" /></span><form action="${pageContext.request.contextPath}/logout" method="post"><button class="link-button" type="submit">Đăng xuất</button></form></div></div></header>
+<main class="shell main-content">
